@@ -21,9 +21,16 @@ const popUp = document.querySelector("#popUp")
 console.log(popUp)
 const close = document.querySelector("#close")
 const annuler = document.querySelector("#annuler")
+const creer =document.querySelector("#creer")
+
+
+const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
+const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
+const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 
 
 let allCards =[]
+
 
 export function afficherCartes(cards) {
 allCards = cards
@@ -68,10 +75,52 @@ cptTodo.textContent = nombreTodo;
 
 }
 }
-formDialog.addEventListener("submit", function(event){
+nouvelleCarte.addEventListener("click", function(e){
+    e.preventDefault()
+    popUp.showModal()
+})
+close.addEventListener("click",function(){
+    popUp.close()
+})
+annuler.addEventListener("click",function(){
+    popUp.close()
+    formDialog.reset()
+})
+
+formDialog.addEventListener("submit",function(event){
+
     event.preventDefault()
+    let titreValide = check(titre, regexTitre)
+    let descriptionValide = check(description, regexDescription)
+    let assigneValide = check(assigneCarte, regexAssigne)
+
+let prioriteValide = false
+    let messagePriorite = prioriteCarte.nextElementSibling
+   if (prioriteCarte.value === "") {
+        messagePriorite.classList.remove("hidden")
+         messagePriorite.style.color = "red"
+        prioriteCarte.style.border = "1px solid red"
+    } else {
+        messagePriorite.classList.add("hidden")
+        prioriteCarte.style.border = "1px solid green"
+        prioriteValide = true
+    }
 
 
+     let statutValide = false
+    let messageStatut = statutCarte.nextElementSibling
+
+    if (statutCarte.value === "") {
+        messageStatut.classList.remove("hidden")
+          messageStatut.style.color = "red"
+        statutCarte.style.border = "1px solid red"
+    } else {
+        messageStatut.classList.add("hidden")
+        statutCarte.style.border = "1px solid green"
+        statutValide = true
+    }
+  let dateValide = verifierDate(date.value)
+  if(titreValide && descriptionValide && assigneValide && prioriteValide && statutValide && dateValide){
 
 let nouvCarte = {
         title: titre.value,
@@ -85,16 +134,47 @@ allCards.push(nouvCarte)
 afficherCartes(allCards)
 formDialog.reset()
 popUp.close()
+
+  }
 })
 
 
-nouvelleCarte.addEventListener("click", function(e){
-    e.preventDefault()
-    popUp.showModal()
-})
-close.addEventListener("click",function(){
-    popUp.close()
-})
-annuler.addEventListener("click",function(){
-    popUp.close()
-})
+function check(a, b) {
+    let message = a.nextElementSibling
+
+    if (!b.test(a.value.trim())) {
+        message.classList.remove("hidden")
+        a.style.border = "1px solid red"
+        message.style.color = "red"
+        return false
+
+    } else {
+        message.classList.add("hidden")
+        a.style.border = "1px solid green"
+        return true
+    }
+}
+
+
+function verifierDate(dateChoisie){
+    let message = date.nextElementSibling
+    let ajourdhui = new Date()
+    let dateActuelle = ajourdhui.getFullYear() +"-"+
+        String(ajourdhui.getMonth()+1).padStart(2,"0")+"-"+
+        String(ajourdhui.getDate()).padStart(2,"0")
+
+        if (dateChoisie === "") {
+        message.textContent = "Veuillez choisir une date."
+        date.style.border = "1px solid red"
+        return false
+    }
+        if (dateChoisie < dateActuelle) {
+        message.textContent = "Votre date est déjà passée, veuillez choisir une nouvelle date."
+        date.style.border = "1px solid red"
+        return false
+    }
+    message.classList.add("hidden")
+    date.style.border = "1px solid green"
+    return true
+}
+
