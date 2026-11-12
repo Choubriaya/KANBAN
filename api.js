@@ -1,23 +1,40 @@
-import { afficherCartes } from "./ui.js"
+export function recup(resolved, rejected,status = "",priority = "",assignee = ""){
 
-fetch('https://flowboard-api-virid.vercel.app/cards', {
+ let url = new URLSearchParams()
+
+if(status.trim() !== ""){
+    url.set("q",status)
+}
+if(priority.trim() !== ""){
+    url.set("priority",priority)
+}
+
+if(assignee){
+    url.set("assignee",assignee)
+}
+fetch('https://flowboard-api-virid.vercel.app/cards?'+ url.toString() , {
   headers: {
     'X-Workspace': 'public'
   }
 })
-.then(reponce=>{
-    if(!reponce.ok){
+.then(reponse=>{
+    if(!reponse.ok){
         throw new Error("erreur")
     }
-    return reponce.json()
+    return reponse.json()
   })
 
 .then(data=> {
-    console.log(data)
-    console.log(data.length)
+    // console.log(data)
+    // console.log(data.length)
+    resolved(data)
 
-    afficherCartes(data)
 }) 
-.catch(function (Erreur) {
-    console.log(Erreur)
+.catch(()=> {
+    rejected()
 })
+}
+
+
+
+
