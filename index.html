@@ -24,7 +24,7 @@
     <section class="bg-white border-b border-slate-200 px-6 py-3 shadow-sm">
         <form id="form" class="flex items-center gap-3 justify-end  gap-10">
             <div class="">
-                <input type="text" id="filter" placeholder="Rechercher une tâche..."
+                <input type="text" id="chercher" placeholder="Rechercher une tâche..."
                     class="w-full px-3 py-2 text-lg  border border-slate-300 rounded-sm ">
             </div>
 
@@ -49,21 +49,15 @@
         </form>
     </section>
 
-
-
-    <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full items-start"></div>
-
-  -->
-
     <main>
         <!-- mssg err chargement et videe caché -->
         <div id="errCharge" class="hidden bg-red-50  border-red-200 text-red-700 p-4 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <span class="text-xl">⚠️</span>
-                <span class="text-md font-medium">Une erreur est survenue lors du chargement des données.</span>
+            <div class="flex items-center pl-10">
+                <span class="text-2xl">⚠️</span>
+                <span class="text-xl  pl-3">Une erreur est survenue lors du chargement des données.</span>
             </div>
             <button id="réessayer"
-                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold transition">
+                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-lg font-semibold transition">
                 Réessayer
             </button>
         </div>
@@ -193,7 +187,7 @@
 
                     <input type="text" id="titre" name="titre" placeholder="Ex : Créer une page de connexion"
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg">
-                        <p class="text-red-500 text-sm hidden">Le titre doit contenir entre 3 et 50 caractères.</p>
+                        <p class="err  text-red-500 text-sm hidden">Le titre doit contenir entre 3 et 50 caractères.</p>
                 </label>
             </div>
 
@@ -204,7 +198,7 @@
                     <textarea name="description" id="description" placeholder="Décrivez votre tâche..." rows="3"
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg resize-none">
                         </textarea>
-                        <p class="text-red-500 text-sm hidden">La description doit contenir entre 5 et 300 caractères.</p>
+                        <p class=" err text-red-500 text-sm hidden">La description doit contenir entre 5 et 300 caractères.</p>
                 </label>
             </div>
 
@@ -220,9 +214,10 @@
                         <option value="medium">Moyenne</option>
                         <option value="high">Haute</option>
                     </select>
-                    <p class="text-red-500 text-sm hidden">Veuillez choisir une priorité.</p>
+                    <p class=" err text-red-500 text-sm hidden">Veuillez choisir une priorité.</p>
                 </label>
             </div>
+            
 
 
             <div>
@@ -231,7 +226,7 @@
 
                     <input type="text" id="assigneCarte" placeholder="Ex : Sara"
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg">
-                        <p class="text-red-500 text-sm hidden">Le nom doit contenir entre 2 et 30 caractères.</p>
+                        <p class="err text-red-500 text-sm hidden">Le nom doit contenir entre 2 et 30 caractères.</p>
                 </label>
 
             </div>
@@ -246,7 +241,7 @@
                         <option value="in-progress">En cours</option>
                         <option value="done">Terminé</option>
                     </select>
-                    <p class="text-red-500 text-sm hidden">Veuillez choisir un statut.</p>
+                    <p class="err text-red-500 text-sm hidden">Veuillez choisir un statut.</p>
                 </label>
             </div>
 
@@ -254,7 +249,7 @@
                 <label class="block font-semibold mb-1">
                     Date*
                 <input type="date" id="date" class="w-full border border-gray-300 rounded-lg p-3 bg-white mb-2">
-                <p class="text-red-500 text-sm"></p>
+                <p class=" err text-red-500 text-sm"></p>
                 </label>
             </div>
 
@@ -272,9 +267,6 @@
                 </button>
 
             </div>
-
-
-
 
         </form>
     </dialog>
