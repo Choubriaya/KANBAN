@@ -1,3 +1,6 @@
+import {recup} from "./api.js"
+
+recup(afficherCartes,afficherCharg)
 const colTodo = document.querySelector("#colTodo")
 const colEncour = document.querySelector("#colEncour")
 const colDone = document.querySelector("#colDone")
@@ -21,18 +24,37 @@ const popUp = document.querySelector("#popUp")
 console.log(popUp)
 const close = document.querySelector("#close")
 const annuler = document.querySelector("#annuler")
-const creer =document.querySelector("#creer")
+// const creer =document.querySelector("#creer")
+// const mssgerr = document.querySelectorAll(".err")
+const chargement=document.querySelector("#chargement")
+const errCharge =document.querySelector("#errCharge")
+const ressayer =document.querySelector("#réessayer")
+
+
+const chercher =document.querySelector("#chercher")
+const selection =document.querySelector("#selection")
+const assigne =document.querySelector("#assigne")
+const boutreset =document.querySelector("#boutreset")
+const vide = document.querySelector("#vide")
+
 
 
 const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
 const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
 const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 
-
 let allCards =[]
 
+function afficherCartes(cards) {
+     chargement.classList.add("hidden")
+     errCharge.classList.add("hidden")
+     tableau.classList.remove("hidden")
+    
+     if(cards==0){
+         tableau.classList.add("hidden")
+         vide.classList.remove("hidden")
+     }
 
-export function afficherCartes(cards) {
 allCards = cards
 
     colTodo.textContent = ""
@@ -72,7 +94,6 @@ cptTodo.textContent = nombreTodo;
     cptEncour.textContent = nombreEncour;
     cptDone.textContent = nombreDone;
 
-
 }
 }
 nouvelleCarte.addEventListener("click", function(e){
@@ -105,7 +126,6 @@ let prioriteValide = false
         prioriteCarte.style.border = "1px solid green"
         prioriteValide = true
     }
-
 
      let statutValide = false
     let messageStatut = statutCarte.nextElementSibling
@@ -177,4 +197,36 @@ function verifierDate(dateChoisie){
     date.style.border = "1px solid green"
     return true
 }
+
+
+function afficherCharg(){
+    chargement.classList.remove("hidden")
+    errCharge.classList.remove("hidden")
+    tableau.classList.add("hidden")
+}
+
+ressayer.addEventListener("click",() => {
+    recup(afficherCartes,afficherCharg)
+})
+
+
+function filter(){
+    recup(afficherCartes,afficherCharg, chercher.value ,selection.value, assigne.value)
+}
+
+chercher.addEventListener("input",filter)
+selection.addEventListener("change",filter)
+assigne.addEventListener("change",filter)
+
+
+
+boutreset.addEventListener("click",function(event){
+  event.preventDefault()
+  chercher.value =""
+  selection.value=""
+  assigne.value=""
+   vide.classList.add("hidden")
+  recup(afficherCartes,afficherCharg)
+})
+
 
