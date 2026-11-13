@@ -29,6 +29,7 @@ fetch('https://flowboard-api-virid.vercel.app/cards?'+ url.toString() , {
     // console.log(data.length)
     resolved(data)
 
+
 }) 
 .catch(()=> {
     rejected()

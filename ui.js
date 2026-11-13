@@ -46,6 +46,8 @@ const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 let allCards =[]
 
 function afficherCartes(cards) {
+
+    Menbers(cards)
      chargement.classList.add("hidden")
      errCharge.classList.add("hidden")
      tableau.classList.remove("hidden")
@@ -230,3 +232,13 @@ boutreset.addEventListener("click",function(event){
 })
 
 
+function Menbers(cards){
+    console.log(cards)
+  for (let i=0; i<cards.length;i++){
+    let name = cards[i].assignee
+    let opt = document.createElement("option")
+    opt.value = name 
+    opt.textContent = name 
+    assigne.appendChild(opt)
+  }
+}
