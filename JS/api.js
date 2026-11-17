@@ -1,10 +1,10 @@
-export async function recup(resolved, rejected,status = "",priority = "",assignee = ""){
+export async function recup(status = "",priority = "",assignee = ""){
  let objet ={}
 
-if(status.trim() !== ""){
+if(status.trim()){
     objet.q = status
 }
-if(priority.trim() !== ""){
+if(priority.trim()){
    objet.priority = priority
 }
 
@@ -19,3 +19,6 @@ const response = await axios.get('https://flowboard-api-virid.vercel.app/cards?'
 })
 return response.data
 }
+
+
+

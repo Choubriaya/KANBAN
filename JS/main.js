@@ -1,13 +1,23 @@
 import * as api from './api.js'
 import * as ui from './ui.js'
-import * as store from './store.js'
+// import * as store from './store.js'
 
 let allCards = []
 
 
 // EVENT LISTENERS ...
-
-
+async function chargerLesCartes(status = "",priority = "",assignee = ""){
+    ui.afficherCharg()
+    try{
+        const cards = await api.recup(status, priority, assignee)
+        allCards = cards
+        ui.afficherCartes(cards)
+        } catch (error) {
+        console.error(error)
+        ui.afficherErreur()
+    }
+}
+chargerLesCartes()
 
 ui.nouvelleCarte.addEventListener("click", function (e) {
     e.preventDefault()
@@ -72,7 +82,7 @@ ui.formDialog.addEventListener("submit", function (event) {
 })
 
 ui.ressayer.addEventListener("click",() => {
-    recup(afficherCartes,afficherCharg)
+   chargerLesCartes()
 })
 
 

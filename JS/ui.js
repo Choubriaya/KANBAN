@@ -10,38 +10,38 @@ const cptEncour = document.querySelector("#cptEncour")
 const cptDone = document.querySelector("#cptDone")
 
 const tableau = document.querySelector("#tableau")
-const titre = document.querySelector("#titre")
-const description = document.querySelector("#description")
-const assigneCarte = document.querySelector("#assigneCarte")
-const prioriteCarte = document.querySelector("#prioriteCarte")
-const statutCarte = document.querySelector("#statutCarte")
+export const titre = document.querySelector("#titre")
+export const description = document.querySelector("#description")
+export const assigneCarte = document.querySelector("#assigneCarte")
+export const prioriteCarte = document.querySelector("#prioriteCarte")
+export const statutCarte = document.querySelector("#statutCarte")
 const date = document.querySelector("#date")
 
-const formDialog =document.querySelector("#formDialog")
-const nouvelleCarte = document.querySelector("#nouvelleCarte")
-console.log(nouvelleCarte)
-const popUp = document.querySelector("#popUp")
-console.log(popUp)
-const close = document.querySelector("#close")
-const annuler = document.querySelector("#annuler")
+export const formDialog =document.querySelector("#formDialog")
+export const nouvelleCarte = document.querySelector("#nouvelleCarte")
+// console.log(nouvelleCarte)
+export const popUp = document.querySelector("#popUp")
+// console.log(popUp)
+export const close = document.querySelector("#close")
+export const annuler = document.querySelector("#annuler")
 // const creer =document.querySelector("#creer")
 // const mssgerr = document.querySelectorAll(".err")
 const chargement=document.querySelector("#chargement")
 const errCharge =document.querySelector("#errCharge")
-const ressayer =document.querySelector("#réessayer")
+export const ressayer =document.querySelector("#réessayer")
 
 
-const chercher =document.querySelector("#chercher")
-const selection =document.querySelector("#selection")
-const assigne =document.querySelector("#assigne")
-const boutreset =document.querySelector("#boutreset")
+export const chercher =document.querySelector("#chercher")
+export const selection =document.querySelector("#selection")
+export const assigne =document.querySelector("#assigne")
+export const boutreset =document.querySelector("#boutreset")
 const vide = document.querySelector("#vide")
 
 
 
-const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
-const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
-const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
+export const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
+export const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
+export const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 
 
 export function afficherCartes(cards) {
@@ -56,8 +56,6 @@ export function afficherCartes(cards) {
          tableau.classList.add("hidden")
          vide.classList.remove("hidden")
      }
-
-allCards = cards
 
     colTodo.textContent = ""
     colEncour.textContent = ""
