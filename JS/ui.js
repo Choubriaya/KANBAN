@@ -9,13 +9,13 @@ const cptTodo = document.querySelector("#cptTodo")
 const cptEncour = document.querySelector("#cptEncour")
 const cptDone = document.querySelector("#cptDone")
 
-const tableau = document.querySelector("#tableau")
+export const tableau = document.querySelector("#tableau")
 export const titre = document.querySelector("#titre")
 export const description = document.querySelector("#description")
 export const assigneCarte = document.querySelector("#assigneCarte")
 export const prioriteCarte = document.querySelector("#prioriteCarte")
 export const statutCarte = document.querySelector("#statutCarte")
-const date = document.querySelector("#date")
+export const date = document.querySelector("#date")
 
 export const formDialog =document.querySelector("#formDialog")
 export const nouvelleCarte = document.querySelector("#nouvelleCarte")
@@ -24,8 +24,9 @@ export const popUp = document.querySelector("#popUp")
 // console.log(popUp)
 export const close = document.querySelector("#close")
 export const annuler = document.querySelector("#annuler")
-// const creer =document.querySelector("#creer")
-// const mssgerr = document.querySelectorAll(".err")
+export const creer =document.querySelector("#creer")
+export const modifier = document.querySelector("#modifier")
+
 const chargement=document.querySelector("#chargement")
 const errCharge =document.querySelector("#errCharge")
 export const ressayer =document.querySelector("#réessayer")
@@ -35,9 +36,9 @@ export const chercher =document.querySelector("#chercher")
 export const selection =document.querySelector("#selection")
 export const assigne =document.querySelector("#assigne")
 export const boutreset =document.querySelector("#boutreset")
-const vide = document.querySelector("#vide")
+export const vide = document.querySelector("#vide")
 
-
+export const carteId = document.querySelector("#carteId")
 
 export const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
 export const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
@@ -67,13 +68,15 @@ export function afficherCartes(cards) {
     let nombreDone = 0;
 
     for (let i = 0; i < cards.length; i++) {
-        let tables = '<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">' +
+        let tables = '<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card">' +
             '<h3 class="font-bold text-lg mb-2">' + cards[i].title + '</h3>' +
             '<p class="text-slate-500 text-sm mb-3">' + cards[i].description + '</p>' +
             '<p class ="text-sm mb-2"> Priorité : ' + cards[i].priority + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].assignee + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].dueDate + '</p>' +
-
+            '<div class="flex justify-end mt-3">' +
+                '<button data-id="' + cards[i].id + '" class="btn-modifier text-indigo-600 hover:underline text-sm font-semibold">Modifier</button>' +
+            '</div>' +
             '</div>'
     
 

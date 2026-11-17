@@ -1,18 +1,17 @@
 import * as api from './api.js'
 import * as ui from './ui.js'
-// import * as store from './store.js'
 
-let allCards = []
-
+let allCards = await api.recup()
 
 // EVENT LISTENERS ...
-async function chargerLesCartes(status = "",priority = "",assignee = ""){
+
+async function chargerLesCartes(status = "", priority = "", assignee = "") {
     ui.afficherCharg()
-    try{
+    try {
         const cards = await api.recup(status, priority, assignee)
         allCards = cards
         ui.afficherCartes(cards)
-        } catch (error) {
+    } catch (error) {
         console.error(error)
         ui.afficherErreur()
     }
@@ -32,8 +31,7 @@ ui.annuler.addEventListener("click", function () {
 })
 
 ui.formDialog.addEventListener("submit", function (event) {
-
-    event.preventDefault()
+    
     let titreValide = ui.check(ui.titre, ui.regexTitre)
     let descriptionValide = ui.check(ui.description, ui.regexDescription)
     let assigneValide = ui.check(ui.assigneCarte, ui.regexAssigne)
@@ -64,7 +62,7 @@ ui.formDialog.addEventListener("submit", function (event) {
     let dateValide = ui.verifierDate(ui.date.value)
     if (titreValide && descriptionValide && assigneValide && prioriteValide && statutValide && dateValide) {
 
-        let nouvCarte = {
+        let data = {
             title: ui.titre.value,
             description: ui.description.value,
             status: ui.statutCarte.value,
@@ -72,8 +70,9 @@ ui.formDialog.addEventListener("submit", function (event) {
             assignee: ui.assigneCarte.value,
             dueDate: ui.date.value
         }
-        allCards.push(nouvCarte)
-        //ls
+
+        api.modifierCarte(ui.carteId.value, data)
+
         ui.afficherCartes(allCards)
         ui.formDialog.reset()
         ui.popUp.close()
@@ -81,26 +80,68 @@ ui.formDialog.addEventListener("submit", function (event) {
     }
 })
 
-ui.ressayer.addEventListener("click",() => {
-   chargerLesCartes()
+ui.ressayer.addEventListener("click", () => {
+    chargerLesCartes()
 })
 
 
-function filter(){
-    recup(ui.afficherCartes, ui.afficherCharg, ui.chercher.value ,ui.selection.value, ui.assigne.value)
+function filter() {
+    recup(ui.afficherCartes, ui.afficherCharg, ui.chercher.value, ui.selection.value, ui.assigne.value)
 }
 
-ui.chercher.addEventListener("input",filter)
-ui.selection.addEventListener("change",filter)
-ui.assigne.addEventListener("change",filter)
+ui.chercher.addEventListener("input", filter)
+ui.selection.addEventListener("change", filter)
+ui.assigne.addEventListener("change", filter)
 
 
+ui.nouvelleCarte.addEventListener("click", function (e) {
+    e.preventDefault()
+    ui.formDialog.reset()
+    ui.carteId.value = ""
 
-ui.boutreset.addEventListener("click",function(event){
-  event.preventDefault()
-  ui.chercher.value =""
-  ui.selection.value=""
-  ui.assigne.value=""
-  ui.vide.classList.add("hidden")
-  chargerLesCartes()
+    ui.creer.classList.remove("hidden")
+    ui.modifier.classList.add("hidden")
+
+    ui.popUp.showModal()
 })
+
+ui.boutreset.addEventListener("click", function (event) {
+    event.preventDefault()
+    ui.chercher.value = ""
+    ui.selection.value = ""
+    ui.assigne.value = ""
+    ui.vide.classList.add("hidden")
+    chargerLesCartes()
+})
+
+
+ui.nouvelleCarte.addEventListener("click", function (e) {
+    e.preventDefault()
+    ui.carteId.value = ""
+    ui.popUp.showModal()
+})
+
+ui.tableau.addEventListener("click", async function (e) {
+    const bouton = e.target.closest(".btn-modifier")
+    const id = bouton.getAttribute("data-id")
+    console.log(id)
+
+    let selectedCard = await api.fetchSelected(id)    
+
+    ui.carteId.value = selectedCard.id
+    ui.titre.value = selectedCard.title
+    ui.description.value = selectedCard.description
+    ui.prioriteCarte.value = selectedCard.priority
+    ui.assigneCarte.value = selectedCard.assignee
+    ui.statutCarte.value = selectedCard.status
+    ui.date.value = selectedCard.dueDate
+
+    console.log(selectedCard)
+    ui.creer.classList.add("hidden")
+    ui.modifier.classList.remove("hidden")
+    ui.popUp.showModal()
+})
+
+
+
+
