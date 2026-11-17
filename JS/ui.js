@@ -1,6 +1,6 @@
-import {recup} from "./api.js"
+// import {recup} from "./api.js"
+// recup(afficherCartes,afficherCharg)
 
-recup(afficherCartes,afficherCharg)
 const colTodo = document.querySelector("#colTodo")
 const colEncour = document.querySelector("#colEncour")
 const colDone = document.querySelector("#colDone")
@@ -43,14 +43,14 @@ const regexTitre = /^[A-Za-zÀ-ÿ0-9\s'-]{3,50}$/
 const regexDescription = /^[A-Za-zÀ-ÿ0-9\s.,!?'-]{5,300}$/
 const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 
-let allCards =[]
 
-function afficherCartes(cards) {
+export function afficherCartes(cards) {
 
-    Menbers(cards)
+    Members(cards)
      chargement.classList.add("hidden")
      errCharge.classList.add("hidden")
      tableau.classList.remove("hidden")
+     vide.classList.add("hidden")
     
      if(cards==0){
          tableau.classList.add("hidden")
@@ -92,76 +92,77 @@ allCards = cards
         nombreDone++;
     }
     
-cptTodo.textContent = nombreTodo;
+    cptTodo.textContent = nombreTodo;
     cptEncour.textContent = nombreEncour;
     cptDone.textContent = nombreDone;
 
 }
+
 }
-nouvelleCarte.addEventListener("click", function(e){
-    e.preventDefault()
-    popUp.showModal()
-})
-close.addEventListener("click",function(){
-    popUp.close()
-})
-annuler.addEventListener("click",function(){
-    popUp.close()
-    formDialog.reset()
-})
+// nouvelleCarte.addEventListener("click", function(e){
+//     e.preventDefault()
+//     popUp.showModal()
+// })
+// close.addEventListener("click",function(){
+//     popUp.close()
+// })
+// annuler.addEventListener("click",function(){
+//     popUp.close()
+//     formDialog.reset()
+// })
 
-formDialog.addEventListener("submit",function(event){
+// formDialog.addEventListener("submit",function(event){
 
-    event.preventDefault()
-    let titreValide = check(titre, regexTitre)
-    let descriptionValide = check(description, regexDescription)
-    let assigneValide = check(assigneCarte, regexAssigne)
+//     event.preventDefault()
+//     let titreValide = check(titre, regexTitre)
+//     let descriptionValide = check(description, regexDescription)
+//     let assigneValide = check(assigneCarte, regexAssigne)
 
-let prioriteValide = false
-    let messagePriorite = prioriteCarte.nextElementSibling
-   if (prioriteCarte.value === "") {
-        messagePriorite.classList.remove("hidden")
-         messagePriorite.style.color = "red"
-        prioriteCarte.style.border = "1px solid red"
-    } else {
-        messagePriorite.classList.add("hidden")
-        prioriteCarte.style.border = "1px solid green"
-        prioriteValide = true
-    }
+// let prioriteValide = false
+//     let messagePriorite = prioriteCarte.nextElementSibling
+//    if (prioriteCarte.value === "") {
+//         messagePriorite.classList.remove("hidden")
+//          messagePriorite.style.color = "red"
+//         prioriteCarte.style.border = "1px solid red"
+//     } else {
+//         messagePriorite.classList.add("hidden")
+//         prioriteCarte.style.border = "1px solid green"
+//         prioriteValide = true
+//     }
 
-     let statutValide = false
-    let messageStatut = statutCarte.nextElementSibling
+//      let statutValide = false
+//     let messageStatut = statutCarte.nextElementSibling
 
-    if (statutCarte.value === "") {
-        messageStatut.classList.remove("hidden")
-          messageStatut.style.color = "red"
-        statutCarte.style.border = "1px solid red"
-    } else {
-        messageStatut.classList.add("hidden")
-        statutCarte.style.border = "1px solid green"
-        statutValide = true
-    }
-  let dateValide = verifierDate(date.value)
-  if(titreValide && descriptionValide && assigneValide && prioriteValide && statutValide && dateValide){
+//     if (statutCarte.value === "") {
+//         messageStatut.classList.remove("hidden")
+//           messageStatut.style.color = "red"
+//         statutCarte.style.border = "1px solid red"
+//     } else {
+//         messageStatut.classList.add("hidden")
+//         statutCarte.style.border = "1px solid green"
+//         statutValide = true
+//     }
+//   let dateValide = verifierDate(date.value)
+//   if(titreValide && descriptionValide && assigneValide && prioriteValide && statutValide && dateValide){
 
-let nouvCarte = {
-        title: titre.value,
-        description: description.value,
-        status: statutCarte.value,
-        priority: prioriteCarte.value ,
-        assignee: assigneCarte.value,
-        dueDate :date.value
-    }
-allCards.push(nouvCarte)
-afficherCartes(allCards)
-formDialog.reset()
-popUp.close()
+// let nouvCarte = {
+//         title: titre.value,
+//         description: description.value,
+//         status: statutCarte.value,
+//         priority: prioriteCarte.value ,
+//         assignee: assigneCarte.value,
+//         dueDate :date.value
+//     }
+// allCards.push(nouvCarte)
+// afficherCartes(allCards)
+// formDialog.reset()
+// popUp.close()
 
-  }
-})
+//   }
+// })
 
 
-function check(a, b) {
+export  function check(a, b) {
     let message = a.nextElementSibling
 
     if (!b.test(a.value.trim())) {
@@ -178,7 +179,7 @@ function check(a, b) {
 }
 
 
-function verifierDate(dateChoisie){
+export function verifierDate(dateChoisie){
     let message = date.nextElementSibling
     let ajourdhui = new Date()
     let dateActuelle = ajourdhui.getFullYear() +"-"+
@@ -201,44 +202,50 @@ function verifierDate(dateChoisie){
 }
 
 
-function afficherCharg(){
+export function afficherCharg(){
     chargement.classList.remove("hidden")
+    errCharge.classList.add("hidden")
+    tableau.classList.add("hidden")
+}
+
+export function afficherErreur(){
+    chargement.classList.add("hidden")
     errCharge.classList.remove("hidden")
     tableau.classList.add("hidden")
 }
 
-ressayer.addEventListener("click",() => {
-    recup(afficherCartes,afficherCharg)
-})
+// ressayer.addEventListener("click",() => {
+//     recup(afficherCartes,afficherCharg)
+// })
 
 
-function filter(){
-    recup(afficherCartes,afficherCharg, chercher.value ,selection.value, assigne.value)
-}
+// function filter(){
+//     recup(afficherCartes,afficherCharg, chercher.value ,selection.value, assigne.value)
+// }
 
-chercher.addEventListener("input",filter)
-selection.addEventListener("change",filter)
-assigne.addEventListener("change",filter)
-
-
-
-boutreset.addEventListener("click",function(event){
-  event.preventDefault()
-  chercher.value =""
-  selection.value=""
-  assigne.value=""
-   vide.classList.add("hidden")
-  recup(afficherCartes,afficherCharg)
-})
+// chercher.addEventListener("input",filter)
+// selection.addEventListener("change",filter)
+// assigne.addEventListener("change",filter)
 
 
-function Menbers(cards){
-    console.log(cards)
-  for (let i=0; i<cards.length;i++){
+
+// boutreset.addEventListener("click",function(event){
+//   event.preventDefault()
+//   chercher.value =""
+//   selection.value=""
+//   assigne.value=""
+//    vide.classList.add("hidden")
+//   recup(afficherCartes,afficherCharg)
+// })
+
+
+
+export function Members(cards){
+    for (let i=0; i<cards.length;i++){
     let name = cards[i].assignee
     let opt = document.createElement("option")
     opt.value = name 
     opt.textContent = name 
-    assigne.appendChild(opt)
+    assigne.appendChild(opt);
   }
 }
