@@ -31,7 +31,7 @@ ui.annuler.addEventListener("click", function () {
 })
 
 ui.formDialog.addEventListener("submit", function (event) {
-    
+event.preventDefault()
     let titreValide = ui.check(ui.titre, ui.regexTitre)
     let descriptionValide = ui.check(ui.description, ui.regexDescription)
     let assigneValide = ui.check(ui.assigneCarte, ui.regexAssigne)
@@ -70,13 +70,34 @@ ui.formDialog.addEventListener("submit", function (event) {
             assignee: ui.assigneCarte.value,
             dueDate: ui.date.value
         }
-
-        api.modifierCarte(ui.carteId.value, data)
-
-        ui.afficherCartes(allCards)
-        ui.formDialog.reset()
+        if (ui.carteId.value) {
         ui.popUp.close()
-
+            Swal.fire({
+                title: "Êtes-vous sûr ?",
+                text: "Voulez-vous vraiment modifier cette carte ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#463ecc",
+                cancelButtonColor: "#e65b5b",
+                confirmButtonText: "Oui, modifier",
+                cancelButtonText: "Annuler"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        await api.modifierCarte(ui.carteId.value, data)
+                        await chargerLesCartes()
+                        ui.formDialog.reset()
+                        ui.popUp.close()
+                        Swal.fire("Modifié !", "La carte a été mise à jour avec succès.", "success")
+                    } catch(error){
+                        console.error(error)
+                        Swal.fire("Erreur", "Une erreur est survenue lors de la modification.", "error")
+                    }
+                }
+            })
+        } else {
+            ui.popUp.showModal()
+        }
     }
 })
 
@@ -85,8 +106,9 @@ ui.ressayer.addEventListener("click", () => {
 })
 
 
-function filter() {
-    recup(ui.afficherCartes, ui.afficherCharg, ui.chercher.value, ui.selection.value, ui.assigne.value)
+async function filter() {
+    const cards = await api.recup(ui.chercher.value, ui.selection.value, ui.assigne.value)
+    ui.afficherCartes(cards)
 }
 
 ui.chercher.addEventListener("input", filter)
@@ -126,7 +148,7 @@ ui.tableau.addEventListener("click", async function (e) {
     const id = bouton.getAttribute("data-id")
     console.log(id)
 
-    let selectedCard = await api.fetchSelected(id)    
+    let selectedCard = await api.fetchSelected(id)
 
     ui.carteId.value = selectedCard.id
     ui.titre.value = selectedCard.title
@@ -141,6 +163,7 @@ ui.tableau.addEventListener("click", async function (e) {
     ui.modifier.classList.remove("hidden")
     ui.popUp.showModal()
 })
+
 
 
 
