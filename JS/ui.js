@@ -17,25 +17,25 @@ export const prioriteCarte = document.querySelector("#prioriteCarte")
 export const statutCarte = document.querySelector("#statutCarte")
 export const date = document.querySelector("#date")
 
-export const formDialog =document.querySelector("#formDialog")
+export const formDialog = document.querySelector("#formDialog")
 export const nouvelleCarte = document.querySelector("#nouvelleCarte")
 // console.log(nouvelleCarte)
 export const popUp = document.querySelector("#popUp")
 // console.log(popUp)
 export const close = document.querySelector("#close")
 export const annuler = document.querySelector("#annuler")
-export const creer =document.querySelector("#creer")
+export const creer = document.querySelector("#creer")
 export const modifier = document.querySelector("#modifier")
 
-const chargement=document.querySelector("#chargement")
-const errCharge =document.querySelector("#errCharge")
-export const ressayer =document.querySelector("#réessayer")
+const chargement = document.querySelector("#chargement")
+const errCharge = document.querySelector("#errCharge")
+export const ressayer = document.querySelector("#réessayer")
 
 
-export const chercher =document.querySelector("#chercher")
-export const selection =document.querySelector("#selection")
-export const assigne =document.querySelector("#assigne")
-export const boutreset =document.querySelector("#boutreset")
+export const chercher = document.querySelector("#chercher")
+export const selection = document.querySelector("#selection")
+export const assigne = document.querySelector("#assigne")
+export const boutreset = document.querySelector("#boutreset")
 export const vide = document.querySelector("#vide")
 
 export const carteId = document.querySelector("#carteId")
@@ -48,15 +48,15 @@ export const regexAssigne = /^[A-Za-zÀ-ÿ\s'-]{2,30}$/
 export function afficherCartes(cards) {
 
     Members(cards)
-     chargement.classList.add("hidden")
-     errCharge.classList.add("hidden")
-     tableau.classList.remove("hidden")
-     vide.classList.add("hidden")
-    
-     if(cards==0){
-         tableau.classList.add("hidden")
-         vide.classList.remove("hidden")
-     }
+    chargement.classList.add("hidden")
+    errCharge.classList.add("hidden")
+    tableau.classList.remove("hidden")
+    vide.classList.add("hidden")
+
+    if (cards == 0) {
+        tableau.classList.add("hidden")
+        vide.classList.remove("hidden")
+    }
 
     colTodo.textContent = ""
     colEncour.textContent = ""
@@ -68,37 +68,50 @@ export function afficherCartes(cards) {
     let nombreDone = 0;
 
     for (let i = 0; i < cards.length; i++) {
+        let fleche = ""
+        if (cards[i].status === "todo") {
+            fleche = '<button data-id="' + cards[i].id + '" data-status="in-progress" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">→</button>'
+    } else if (cards[i].status === "in-progress") {
+    fleche = '<div class="flex justify-between items-center w-full mt-3">' +
+        '<button data-id="' + cards[i].id + '" data-status="todo" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">←</button>' +
+        '<button data-id="' + cards[i].id + '" data-status="done" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">→</button>' +
+    '</div>'
+        } else if (cards[i].status === "done") {
+            fleche = '<button data-id="' + cards[i].id + '" data-status="in-progress" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">←</button>'
+
+        }
         let tables = '<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card">' +
             '<h3 class="font-bold text-lg mb-2">' + cards[i].title + '</h3>' +
             '<p class="text-slate-500 text-sm mb-3">' + cards[i].description + '</p>' +
             '<p class ="text-sm mb-2"> Priorité : ' + cards[i].priority + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].assignee + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].dueDate + '</p>' +
-          '<div class="flex justify-between gap- mt-3">' + // <-- Un seul conteneur flex avec un espace (gap-3) entre les deux
-        '<button data-id="' + cards[i].id + '" class="btn-modifier text-indigo-600 hover:underline text-s font-semibold">Modifier</button>' +
-        '<button data-id="' + cards[i].id + '" class="btn-supprimer text-red-600 hover:underline text-s font-semibold">Supprimer</button>' +
-    '</div>' +
+            '<div class="flex justify-between gap- mt-3">' +
+            '<button data-id="' + cards[i].id + '" class="btn-modifier text-indigo-600 hover:underline text-s font-semibold">Modifier</button>' +
+            '<button data-id="' + cards[i].id + '" class="btn-supprimer text-red-600 hover:underline text-s font-semibold">Supprimer</button>' +
+            '</div>' +
+            '<div class="flex gap-2 mt-3 ">' + fleche + '</div>' +
             '</div>'
-    
 
-    if (cards[i].status == "todo") {
-        colTodo.innerHTML +=  tables
-        nombreTodo++;
-    }
-    if (cards[i].status == "in-progress") {
-        colEncour.innerHTML +=  tables
-        nombreEncour++;
-    }
-    if (cards[i].status == "done") {
-        colDone.innerHTML +=  tables
-        nombreDone++;
-    }
-    
-    cptTodo.textContent = nombreTodo;
-    cptEncour.textContent = nombreEncour;
-    cptDone.textContent = nombreDone;
 
-}
+        if (cards[i].status == "todo") {
+            colTodo.innerHTML += tables
+            nombreTodo++;
+        }
+        if (cards[i].status == "in-progress") {
+            colEncour.innerHTML += tables
+            nombreEncour++;
+        }
+        if (cards[i].status == "done") {
+            colDone.innerHTML += tables
+            nombreDone++;
+        }
+
+        cptTodo.textContent = nombreTodo;
+        cptEncour.textContent = nombreEncour;
+        cptDone.textContent = nombreDone;
+
+    }
 
 }
 // nouvelleCarte.addEventListener("click", function(e){
@@ -164,7 +177,7 @@ export function afficherCartes(cards) {
 // })
 
 
-export  function check(a, b) {
+export function check(a, b) {
     let message = a.nextElementSibling
 
     if (!b.test(a.value.trim())) {
@@ -181,19 +194,19 @@ export  function check(a, b) {
 }
 
 
-export function verifierDate(dateChoisie){
+export function verifierDate(dateChoisie) {
     let message = date.nextElementSibling
     let ajourdhui = new Date()
-    let dateActuelle = ajourdhui.getFullYear() +"-"+
-        String(ajourdhui.getMonth()+1).padStart(2,"0")+"-"+
-        String(ajourdhui.getDate()).padStart(2,"0")
+    let dateActuelle = ajourdhui.getFullYear() + "-" +
+        String(ajourdhui.getMonth() + 1).padStart(2, "0") + "-" +
+        String(ajourdhui.getDate()).padStart(2, "0")
 
-        if (dateChoisie === "") {
+    if (dateChoisie === "") {
         message.textContent = "Veuillez choisir une date."
         date.style.border = "1px solid red"
         return false
     }
-        if (dateChoisie < dateActuelle) {
+    if (dateChoisie < dateActuelle) {
         message.textContent = "Votre date est déjà passée, veuillez choisir une nouvelle date."
         date.style.border = "1px solid red"
         return false
@@ -204,13 +217,13 @@ export function verifierDate(dateChoisie){
 }
 
 
-export function afficherCharg(){
+export function afficherCharg() {
     chargement.classList.remove("hidden")
     errCharge.classList.add("hidden")
     tableau.classList.add("hidden")
 }
 
-export function afficherErreur(){
+export function afficherErreur() {
     chargement.classList.add("hidden")
     errCharge.classList.remove("hidden")
     tableau.classList.add("hidden")
@@ -242,12 +255,12 @@ export function afficherErreur(){
 
 
 
-export function Members(cards){
-    for (let i=0; i<cards.length;i++){
-    let name = cards[i].assignee
-    let opt = document.createElement("option")
-    opt.value = name 
-    opt.textContent = name 
-    assigne.appendChild(opt);
-  }
+export function Members(cards) {
+    for (let i = 0; i < cards.length; i++) {
+        let name = cards[i].assignee
+        let opt = document.createElement("option")
+        opt.value = name
+        opt.textContent = name
+        assigne.appendChild(opt);
+    }
 }

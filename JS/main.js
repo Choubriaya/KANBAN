@@ -176,7 +176,7 @@ ui.tableau.addEventListener("click", async function (e) {
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#dc2626",
-        cancelButtonColor: "#4067b6",  // 
+        cancelButtonColor: "#4067b6", 
         confirmButtonText: "Oui, supprimer",
         cancelButtonText: "Annuler"
     }).then(async (result) => {
