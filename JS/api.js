@@ -36,3 +36,14 @@ export async function fetchSelected(id) {
   const response = await axios.get('https://flowboard-api-virid.vercel.app/cards/' + id)
   return response.data
 }
+
+export async function supprimerCarte(id){
+  const response = await axios.delete(`https://flowboard-api-virid.vercel.app/cards/${id}?password=1234`,
+    {
+    headers: {
+            'X-Workspace': 'public',
+        },
+      
+})
+return response.data
+}

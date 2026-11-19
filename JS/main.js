@@ -31,7 +31,7 @@ ui.annuler.addEventListener("click", function () {
 })
 
 ui.formDialog.addEventListener("submit", function (event) {
-event.preventDefault()
+    event.preventDefault()
     let titreValide = ui.check(ui.titre, ui.regexTitre)
     let descriptionValide = ui.check(ui.description, ui.regexDescription)
     let assigneValide = ui.check(ui.assigneCarte, ui.regexAssigne)
@@ -71,14 +71,14 @@ event.preventDefault()
             dueDate: ui.date.value
         }
         if (ui.carteId.value) {
-        ui.popUp.close()
+            ui.popUp.close()
             Swal.fire({
                 title: "Êtes-vous sûr ?",
                 text: "Voulez-vous vraiment modifier cette carte ?",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#463ecc",
-                cancelButtonColor: "#e65b5b",
+                confirmButtonColor: "#1a148c",
+                cancelButtonColor: "#810f0f",
                 confirmButtonText: "Oui, modifier",
                 cancelButtonText: "Annuler"
             }).then(async (result) => {
@@ -89,7 +89,7 @@ event.preventDefault()
                         ui.formDialog.reset()
                         ui.popUp.close()
                         Swal.fire("Modifié !", "La carte a été mise à jour avec succès.", "success")
-                    } catch(error){
+                    } catch (error) {
                         console.error(error)
                         Swal.fire("Erreur", "Une erreur est survenue lors de la modification.", "error")
                     }
@@ -166,5 +166,9 @@ ui.tableau.addEventListener("click", async function (e) {
 
 
 
-
-
+ui.tableau.addEventListener("click", async function (e) {
+    const boutonSupprimer = e.target.closest(".btn-supprimer")
+    const id = boutonSupprimer.getAttribute("data-id")
+                await api.supprimerCarte(id)
+                await chargerLesCartes()
+})

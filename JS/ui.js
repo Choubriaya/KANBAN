@@ -74,9 +74,10 @@ export function afficherCartes(cards) {
             '<p class ="text-sm mb-2"> Priorité : ' + cards[i].priority + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].assignee + '</p>' +
             '<p class="text-sm text-slate-600">' + cards[i].dueDate + '</p>' +
-            '<div class="flex justify-end mt-3">' +
-                '<button data-id="' + cards[i].id + '" class="btn-modifier text-indigo-600 hover:underline text-sm font-semibold">Modifier</button>' +
-            '</div>' +
+          '<div class="flex justify-between gap- mt-3">' + // <-- Un seul conteneur flex avec un espace (gap-3) entre les deux
+        '<button data-id="' + cards[i].id + '" class="btn-modifier text-indigo-600 hover:underline text-s font-semibold">Modifier</button>' +
+        '<button data-id="' + cards[i].id + '" class="btn-supprimer text-red-600 hover:underline text-s font-semibold">Supprimer</button>' +
+    '</div>' +
             '</div>'
     
 
