@@ -31,7 +31,7 @@ ui.annuler.addEventListener("click", function () {
 })
 
 ui.formDialog.addEventListener("submit", function (event) {
-event.preventDefault()
+    event.preventDefault()
     let titreValide = ui.check(ui.titre, ui.regexTitre)
     let descriptionValide = ui.check(ui.description, ui.regexDescription)
     let assigneValide = ui.check(ui.assigneCarte, ui.regexAssigne)
@@ -71,7 +71,7 @@ event.preventDefault()
             dueDate: ui.date.value
         }
         if (ui.carteId.value) {
-        ui.popUp.close()
+            ui.popUp.close()
             Swal.fire({
                 title: "Êtes-vous sûr ?",
                 text: "Voulez-vous vraiment modifier cette carte ?",
@@ -89,7 +89,7 @@ event.preventDefault()
                         ui.formDialog.reset()
                         ui.popUp.close()
                         Swal.fire("Modifié !", "La carte a été mise à jour avec succès.", "success")
-                    } catch(error){
+                    } catch (error) {
                         console.error(error)
                         Swal.fire("Erreur", "Une erreur est survenue lors de la modification.", "error")
                     }
@@ -145,6 +145,7 @@ ui.nouvelleCarte.addEventListener("click", function (e) {
 
 ui.tableau.addEventListener("click", async function (e) {
     const bouton = e.target.closest(".btn-modifier")
+    if(!bouton) return
     const id = bouton.getAttribute("data-id")
     console.log(id)
 
@@ -168,27 +169,54 @@ ui.tableau.addEventListener("click", async function (e) {
 
 ui.tableau.addEventListener("click", async function (e) {
     const boutonSupprimer = e.target.closest(".btn-supprimer")
+    if (!boutonSupprimer) return
     const id = boutonSupprimer.getAttribute("data-id")
-
+    
     Swal.fire({
         title: "Êtes-vous sûr ?",
         text: "Voulez-vous vraiment supprimer cette carte ? Cette action est irréversible.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#dc2626",
-        cancelButtonColor: "#4067b6", 
+        cancelButtonColor: "#4067b6",
         confirmButtonText: "Oui, supprimer",
         cancelButtonText: "Annuler"
     }).then(async (result) => {
         if (result.isConfirmed) {
             try {
-await api.supprimerCarte(id)
-await chargerLesCartes()
-Swal.fire("Supprimé !", "La carte a bien été supprimée.", "success")
+                await api.supprimerCarte(id)
+                await chargerLesCartes()
+                Swal.fire("Supprimé !", "La carte a bien été supprimée.", "success")
             } catch (error) {
                 console.error(error)
-            Swal.fire("Erreur", "Une erreur est survenue lors de la suppression de la carte.", "error")
+                Swal.fire("Erreur", "Une erreur est survenue lors de la suppression de la carte.", "error")
             }
         }
     })
+})
+
+ui.tableau. addEventListener("click",async function(e) {
+    const boutondeplac =e.target.closest(".btn-deplacer")
+    if (!boutondeplac) return
+    console.log(boutondeplac)
+
+    const id = boutondeplac.getAttribute("data-id")
+        const nouveauStat = boutondeplac.getAttribute("data-status")
+    
+        try {
+            const carteNow = await api.fetchSelected(id)
+            const dataNow = {
+                title : carteNow.title,
+                description :carteNow.description,
+                status :nouveauStat,
+                priority :carteNow.priority,
+                assigne :carteNow.assignee,
+                dueDate :carteNow.dueDate
+            }
+
+            await api.modifierCarte(id, dataNow)
+            await chargerLesCartes()
+        } catch (error) {
+            console.error(error)
+        }
 })
