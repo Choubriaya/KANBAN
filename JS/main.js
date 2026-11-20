@@ -6,15 +6,25 @@ import * as ls from './store.js'
 
 // EVENT LISTENERS ...
 
-async function chargerLesCartes(status = "", priority = "", assignee = "") {
+ async function chargerLesCartes(status = "", priority = "", assignee = "") {
     ui.afficherCharg()
     try {
         const cards = await api.recup(status, priority, assignee)
         // allCards = cards
         ui.afficherCartes(cards)
+
+        // if (status == "" && priority == "" && assignee == "") {
+        //     ls.sauvegarder(cards)
+        // }
+        // ui.afficherCartes(cards)
+
     } catch (error) {
-        console.error(error)
-        ui.afficherErreur()
+        // ui.afficherErreur()
+        // if (status == "" && priority == "" && assignee == "") {
+        //      ls.cardsLocal()
+        // }else{
+        //     ui.afficherErreur()
+        // }
     }
 }
 chargerLesCartes()
@@ -145,81 +155,81 @@ ui.tableau.addEventListener("click", async function (e) {
     const bouton = e.target.closest(".btn-modifier")
     if (bouton) {
 
-    const id = bouton.getAttribute("data-id")
-    console.log(id)
-    try {
-        let selectedCard = await api.fetchSelected(id)
+        const id = bouton.getAttribute("data-id")
+        console.log(id)
+        try {
+            let selectedCard = await api.fetchSelected(id)
 
-        ui.carteId.value = selectedCard.id
-        ui.titre.value = selectedCard.title
-        ui.description.value = selectedCard.description
-        ui.prioriteCarte.value = selectedCard.priority
-        ui.assigneCarte.value = selectedCard.assignee
-        ui.statutCarte.value = selectedCard.status
-        ui.date.value = selectedCard.dueDate
+            ui.carteId.value = selectedCard.id
+            ui.titre.value = selectedCard.title
+            ui.description.value = selectedCard.description
+            ui.prioriteCarte.value = selectedCard.priority
+            ui.assigneCarte.value = selectedCard.assignee
+            ui.statutCarte.value = selectedCard.status
+            ui.date.value = selectedCard.dueDate
 
-        console.log(selectedCard)
-        ui.creer.classList.add("hidden")
-        ui.modifier.classList.remove("hidden")
-        ui.popUp.showModal()
-    } catch (error) {
-        console.error(error)
+            console.log(selectedCard)
+            ui.creer.classList.add("hidden")
+            ui.modifier.classList.remove("hidden")
+            ui.popUp.showModal()
+        } catch (error) {
+            console.error(error)
+        }
+        return
     }
-    return
-}
-// supp
+    // supp
     const boutonSupprimer = e.target.closest(".btn-supprimer")
-if (boutonSupprimer) {
-    const id = boutonSupprimer.getAttribute("data-id")
-    Swal.fire({
-        title: "Êtes-vous sûr ?",
-        text: "Voulez-vous vraiment supprimer cette carte ? Cette action est irréversible.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#dc2626",
-        cancelButtonColor: "#4067b6",
-        confirmButtonText: "Oui, supprimer",
-        cancelButtonText: "Annuler"
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            try {
-                await api.supprimerCarte(id)
-                // console.log(api.supprimerCarte(id))
-                await chargerLesCartes()
-                Swal.fire("Supprimé !", "La carte a bien été supprimée.", "success")
-            } catch (error) {
-                console.error(error)
-                Swal.fire("Erreur", "Une erreur est survenue lors de la suppression de la carte.", "error")
+    if (boutonSupprimer) {
+        const id = boutonSupprimer.getAttribute("data-id")
+        Swal.fire({
+            title: "Êtes-vous sûr ?",
+            text: "Voulez-vous vraiment supprimer cette carte ? Cette action est irréversible.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc2626",
+            cancelButtonColor: "#4067b6",
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await api.supprimerCarte(id)
+                    // console.log(api.supprimerCarte(id))
+                    await chargerLesCartes()
+                    Swal.fire("Supprimé !", "La carte a bien été supprimée.", "success")
+                } catch (error) {
+                    console.error(error)
+                    Swal.fire("Erreur", "Une erreur est survenue lors de la suppression de la carte.", "error")
+                }
+            }
+        })
+        return
     }
+    //nav
+    const boutondeplac = e.target.closest(".btn-deplacer")
+    if (boutondeplac) {
+        console.log(boutondeplac)
+
+        const id = boutondeplac.getAttribute("data-id")
+        const nouveauStat = boutondeplac.getAttribute("data-status")
+
+        try {
+            const carteNow = await api.fetchSelected(id)
+            const dataNow = {
+                title: carteNow.title,
+                description: carteNow.description,
+                status: nouveauStat,
+                priority: carteNow.priority,
+                assigne: carteNow.assignee,
+                dueDate: carteNow.dueDate
+            }
+
+            await api.modifierCarte(id, dataNow)
+            await chargerLesCartes()
+        } catch (error) {
+            console.error(error)
         }
-    })
-    return
-}
-//nav
-const boutondeplac = e.target.closest(".btn-deplacer")
-if (boutondeplac) {
-    console.log(boutondeplac)
-
-    const id = boutondeplac.getAttribute("data-id")
-    const nouveauStat = boutondeplac.getAttribute("data-status")
-
-    try {
-        const carteNow = await api.fetchSelected(id)
-        const dataNow = {
-            title: carteNow.title,
-            description: carteNow.description,
-            status: nouveauStat,
-            priority: carteNow.priority,
-            assigne: carteNow.assignee,
-            dueDate: carteNow.dueDate
-        }
-
-        await api.modifierCarte(id, dataNow)
-        await chargerLesCartes()
-    } catch (error) {
-        console.error(error)
+        return
     }
-    return
-}
 })
 

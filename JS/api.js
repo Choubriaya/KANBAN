@@ -1,23 +1,22 @@
 export async function recup(status = "",priority = "",assignee = ""){
- let objet ={}
+  if(localStorage.getItem('tasks').length || status.trim() || priority.trim() || assignee) {
+    let objet ={}
 
-if(status.trim()){
     objet.q = status
-}
-if(priority.trim()){
-   objet.priority = priority
-}
+    objet.priority = priority
+    objet.assignee = assignee 
 
-if(assignee){
-   objet.assignee = assignee
-}
-const response = await axios.get('https://flowboard-api-virid.vercel.app/cards?', {   
-  headers: {
-    'X-Workspace': 'public'
-  },
-  params : objet
-})
-return response.data
+   const response = await axios.get('https://flowboard-api-virid.vercel.app/cards?', {   
+     headers: {
+       'X-Workspace': 'public'
+     },
+     params : objet
+   })
+
+    localStorage.setItem('tasks', JSON.stringify(response.data))
+    return JSON.parse(localStorage.getItem("tasks"))
+  }
+  return JSON.parse(localStorage.getItem('tasks'))
 }
 
 
