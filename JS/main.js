@@ -1,5 +1,6 @@
 import * as api from './api.js'
 import * as ui from './ui.js'
+import * as ls from './store.js'
 
 // let allCards = await api.recup()
 
@@ -140,12 +141,12 @@ ui.nouvelleCarte.addEventListener("click", function () {
 })
 
 ui.tableau.addEventListener("click", async function (e) {
+    // modif
     const bouton = e.target.closest(".btn-modifier")
-    if (!bouton) return
+    if (bouton) {
 
     const id = bouton.getAttribute("data-id")
     console.log(id)
-    bouton.classList.add("opacity-50", "cursor-not-allowed")
     try {
         let selectedCard = await api.fetchSelected(id)
 
@@ -164,13 +165,12 @@ ui.tableau.addEventListener("click", async function (e) {
     } catch (error) {
         console.error(error)
     }
-})
-
-ui.tableau.addEventListener("click", async function (e) {
+    return
+}
+// supp
     const boutonSupprimer = e.target.closest(".btn-supprimer")
-    if (!boutonSupprimer) return
+if (boutonSupprimer) {
     const id = boutonSupprimer.getAttribute("data-id")
-
     Swal.fire({
         title: "Êtes-vous sûr ?",
         text: "Voulez-vous vraiment supprimer cette carte ? Cette action est irréversible.",
@@ -190,14 +190,14 @@ ui.tableau.addEventListener("click", async function (e) {
             } catch (error) {
                 console.error(error)
                 Swal.fire("Erreur", "Une erreur est survenue lors de la suppression de la carte.", "error")
-            }
+    }
         }
     })
-})
-
-ui.tableau.addEventListener("click", async function (e) {
-    const boutondeplac = e.target.closest(".btn-deplacer")
-    if (!boutondeplac) return
+    return
+}
+//nav
+const boutondeplac = e.target.closest(".btn-deplacer")
+if (boutondeplac) {
     console.log(boutondeplac)
 
     const id = boutondeplac.getAttribute("data-id")
@@ -219,5 +219,7 @@ ui.tableau.addEventListener("click", async function (e) {
     } catch (error) {
         console.error(error)
     }
+    return
+}
 })
 
