@@ -70,9 +70,12 @@ export function afficherCartes(cards) {
     for (let i = 0; i < cards.length; i++) {
         let fleche = ""
         if (cards[i].status === "todo") {
-            fleche = '<button data-id="' + cards[i].id + '" data-status="in-progress" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">→</button>'
+            fleche = '<div class="flex justify-end  w-full mt-3">' +
+            '<button data-id="' + cards[i].id + '" data-status="in-progress" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">→</button>'+
+    '</div>'
+
     } else if (cards[i].status === "in-progress") {
-    fleche = '<div class="flex justify-between items-center w-full mt-3">' +
+    fleche = '<div class="flex justify-between  w-full mt-3">' +
         '<button data-id="' + cards[i].id + '" data-status="todo" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">←</button>' +
         '<button data-id="' + cards[i].id + '" data-status="done" class="btn-deplacer px-3 py-1.5 rounded bg-slate-100 hover:bg-indigo-100 text-indigo-600 font-bold text-lg">→</button>' +
     '</div>'

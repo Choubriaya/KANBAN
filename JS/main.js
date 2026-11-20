@@ -1,7 +1,7 @@
 import * as api from './api.js'
 import * as ui from './ui.js'
 
-let allCards = await api.recup()
+// let allCards = await api.recup()
 
 // EVENT LISTENERS ...
 
@@ -9,7 +9,7 @@ async function chargerLesCartes(status = "", priority = "", assignee = "") {
     ui.afficherCharg()
     try {
         const cards = await api.recup(status, priority, assignee)
-        allCards = cards
+        // allCards = cards
         ui.afficherCartes(cards)
     } catch (error) {
         console.error(error)
@@ -18,12 +18,11 @@ async function chargerLesCartes(status = "", priority = "", assignee = "") {
 }
 chargerLesCartes()
 
-ui.nouvelleCarte.addEventListener("click", function (e) {
-    e.preventDefault()
+ui.nouvelleCarte.addEventListener("click", function () {
     ui.popUp.showModal()
 })
 ui.close.addEventListener("click", function () {
-    popUp.close()
+    ui.popUp.close()
 })
 ui.annuler.addEventListener("click", function () {
     ui.popUp.close()
@@ -116,8 +115,7 @@ ui.selection.addEventListener("change", filter)
 ui.assigne.addEventListener("change", filter)
 
 
-ui.nouvelleCarte.addEventListener("click", function (e) {
-    e.preventDefault()
+ui.nouvelleCarte.addEventListener("click", function () {
     ui.formDialog.reset()
     ui.carteId.value = ""
 
@@ -127,8 +125,7 @@ ui.nouvelleCarte.addEventListener("click", function (e) {
     ui.popUp.showModal()
 })
 
-ui.boutreset.addEventListener("click", function (event) {
-    event.preventDefault()
+ui.boutreset.addEventListener("click", function () {
     ui.chercher.value = ""
     ui.selection.value = ""
     ui.assigne.value = ""
@@ -137,41 +134,43 @@ ui.boutreset.addEventListener("click", function (event) {
 })
 
 
-ui.nouvelleCarte.addEventListener("click", function (e) {
-    e.preventDefault()
+ui.nouvelleCarte.addEventListener("click", function () {
     ui.carteId.value = ""
     ui.popUp.showModal()
 })
 
 ui.tableau.addEventListener("click", async function (e) {
     const bouton = e.target.closest(".btn-modifier")
-    if(!bouton) return
+    if (!bouton) return
+
     const id = bouton.getAttribute("data-id")
     console.log(id)
+    bouton.classList.add("opacity-50", "cursor-not-allowed")
+    try {
+        let selectedCard = await api.fetchSelected(id)
 
-    let selectedCard = await api.fetchSelected(id)
+        ui.carteId.value = selectedCard.id
+        ui.titre.value = selectedCard.title
+        ui.description.value = selectedCard.description
+        ui.prioriteCarte.value = selectedCard.priority
+        ui.assigneCarte.value = selectedCard.assignee
+        ui.statutCarte.value = selectedCard.status
+        ui.date.value = selectedCard.dueDate
 
-    ui.carteId.value = selectedCard.id
-    ui.titre.value = selectedCard.title
-    ui.description.value = selectedCard.description
-    ui.prioriteCarte.value = selectedCard.priority
-    ui.assigneCarte.value = selectedCard.assignee
-    ui.statutCarte.value = selectedCard.status
-    ui.date.value = selectedCard.dueDate
-
-    console.log(selectedCard)
-    ui.creer.classList.add("hidden")
-    ui.modifier.classList.remove("hidden")
-    ui.popUp.showModal()
+        console.log(selectedCard)
+        ui.creer.classList.add("hidden")
+        ui.modifier.classList.remove("hidden")
+        ui.popUp.showModal()
+    } catch (error) {
+        console.error(error)
+    }
 })
-
-
 
 ui.tableau.addEventListener("click", async function (e) {
     const boutonSupprimer = e.target.closest(".btn-supprimer")
     if (!boutonSupprimer) return
     const id = boutonSupprimer.getAttribute("data-id")
-    
+
     Swal.fire({
         title: "Êtes-vous sûr ?",
         text: "Voulez-vous vraiment supprimer cette carte ? Cette action est irréversible.",
@@ -185,6 +184,7 @@ ui.tableau.addEventListener("click", async function (e) {
         if (result.isConfirmed) {
             try {
                 await api.supprimerCarte(id)
+                // console.log(api.supprimerCarte(id))
                 await chargerLesCartes()
                 Swal.fire("Supprimé !", "La carte a bien été supprimée.", "success")
             } catch (error) {
@@ -195,28 +195,29 @@ ui.tableau.addEventListener("click", async function (e) {
     })
 })
 
-ui.tableau. addEventListener("click",async function(e) {
-    const boutondeplac =e.target.closest(".btn-deplacer")
+ui.tableau.addEventListener("click", async function (e) {
+    const boutondeplac = e.target.closest(".btn-deplacer")
     if (!boutondeplac) return
     console.log(boutondeplac)
 
     const id = boutondeplac.getAttribute("data-id")
-        const nouveauStat = boutondeplac.getAttribute("data-status")
-    
-        try {
-            const carteNow = await api.fetchSelected(id)
-            const dataNow = {
-                title : carteNow.title,
-                description :carteNow.description,
-                status :nouveauStat,
-                priority :carteNow.priority,
-                assigne :carteNow.assignee,
-                dueDate :carteNow.dueDate
-            }
+    const nouveauStat = boutondeplac.getAttribute("data-status")
 
-            await api.modifierCarte(id, dataNow)
-            await chargerLesCartes()
-        } catch (error) {
-            console.error(error)
+    try {
+        const carteNow = await api.fetchSelected(id)
+        const dataNow = {
+            title: carteNow.title,
+            description: carteNow.description,
+            status: nouveauStat,
+            priority: carteNow.priority,
+            assigne: carteNow.assignee,
+            dueDate: carteNow.dueDate
         }
+
+        await api.modifierCarte(id, dataNow)
+        await chargerLesCartes()
+    } catch (error) {
+        console.error(error)
+    }
 })
+
